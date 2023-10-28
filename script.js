@@ -56,16 +56,14 @@ const gameController = (function () {
     const players = [];
     players.push(Player('Player 1', 'X'));
     players.push(Player('Player 2', 'O'));
-    let currentPlayer;
 
     function playRound() {
         let player_response, player_row, player_column;
         gameBoard.setBoard(' ');
-    
-        let winner = false;
-        while (!winner) {
+        
+        let currentPlayer;
+        do {
             currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
-
             do {
                 player_response = (prompt(`${currentPlayer.getPlayerName()}, please enter a row and column: `)).split(" ");
                 player_row = player_response[0]-1;
@@ -75,17 +73,16 @@ const gameController = (function () {
             gameBoard.setSquare(currentPlayer.getPlayerToken(), player_row, player_column);
 
             gameBoard.printBoard();
-    
-            winner = isWinner();
-        }
+
+            // currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
+        } while (!isWinner(currentPlayer.getPlayerToken()))
 
         console.log(`${currentPlayer.getPlayerName()} is the winner!`);
     }
 
 
-    function isWinner() {
+    function isWinner(currentPlayerToken) {
         let board = (gameBoard.getBoard()).map(row => row.map(square => square.getSquareValue()));
-        let currentPlayerToken = currentPlayer.getPlayerToken();
         for (let i = 0; i < rows; i++) {
             if (board[i][0] === board[i][1] && board[i][1] === board[i][2]) {
                 if (board[i][0] === currentPlayerToken)
@@ -114,7 +111,7 @@ const gameController = (function () {
     return { playRound };
 })();
 
-gameController.playRound();
+// gameController.playRound();
 
 
 // UI
